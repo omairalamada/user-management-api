@@ -1,9 +1,11 @@
+import { UserEntity } from './modules/users/entities/user.entity';
 import { AuthModule } from './modules/auth/auth.module';
 import { UsersModule } from './modules/users/users.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './config/config';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,8 +22,9 @@ import configuration from './config/config';
       username: 'root',
       password: 'root',
       database: 'user-managementdb',
+      entities: [UserEntity],
       autoLoadEntities: true,
-      synchronize: true
+      synchronize: false
     })
   ]
 })

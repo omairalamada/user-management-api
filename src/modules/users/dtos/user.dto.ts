@@ -1,29 +1,37 @@
-import { Expose } from 'class-transformer'
-import { IsNotEmpty, IsNumber } from 'class-validator'
+import { IsEmail, IsNotEmpty, IsNumber, IsString, Matches, MaxLength, MinLength } from 'class-validator'
 
 
 export class UserDto {
     @IsNotEmpty()
-    firstName: string
+    firstName: string;
 
-    @Expose()
-    lastName: string
+    @IsNotEmpty()
+    lastName: string;
 
-    @Expose()
-    address: string
-
-    @IsNumber()
-    postCode: number
+    @IsNotEmpty()
+    address: string;
 
     @IsNumber()
-    contactNumber: number
+    postCode: number;
 
-    @Expose()
+    @IsNotEmpty()
+    contactNumber: string;
+
+    @IsNotEmpty()
+    @IsEmail()
     email: string
 
-    @Expose()
-    username: string
+    @IsNotEmpty()
+    @IsString()
+    @MinLength(4)
+    @MaxLength(20)
+    username: string;
 
-    @Expose()
-    password: string
+    @IsNotEmpty()
+    @MinLength(8)
+    @MaxLength(32)
+    @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+        message: 'password is too weak',
+    })
+    password: string;
 }
