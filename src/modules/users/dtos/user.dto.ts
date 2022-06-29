@@ -1,29 +1,38 @@
-import { Expose } from 'class-transformer'
-import { IsNotEmpty, IsNumber } from 'class-validator'
+import { ApiProperty } from '@nestjs/swagger'
+import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator'
 
 
 export class UserDto {
+    @ApiProperty({ example: 'Omair'})
     @IsNotEmpty()
-    firstName: string
+    firstName?: string
 
-    @Expose()
-    lastName: string
+    @ApiProperty({ example: 'Mangondaya'})
+    @IsNotEmpty()
+    lastName?: string
 
-    @Expose()
-    address: string
+    @ApiProperty({ example: 'Lipa City, Batangas'})
+    @IsNotEmpty()
+    address?: string
 
+    @ApiProperty({ example: '4217'})
     @IsNumber()
-    postCode: number
+    postCode?: number
 
-    @IsNumber()
-    contactNumber: number
+    @ApiProperty({ example: '09303549784'})
+    @IsNotEmpty()
+    contactNumber?: string
 
-    @Expose()
-    email: string
+    @ApiProperty({ example: 'omairmangondaya@gmail.com'})
+    @IsNotEmpty()
+    @IsEmail()
+    email?: string
 
-    @Expose()
-    username: string
+    @ApiProperty({ example: 'omair123'})
+    @IsNotEmpty()
+    username?: string
 
-    @Expose()
+    @ApiProperty({ example: 'password'})
+    @IsNotEmpty()
     password: string
 }
