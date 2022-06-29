@@ -1,5 +1,5 @@
 import { applyDecorators } from '@nestjs/common'
-import { ApiBody, ApiOkResponse, ApiOperation, ApiQuery } from '@nestjs/swagger'
+import { ApiBody, ApiOkResponse, ApiOperation } from '@nestjs/swagger'
 
 export function RegisterDocDecorator() {
     return applyDecorators(
@@ -14,7 +14,7 @@ export function RegisterDocDecorator() {
                     contactNumber: "09303549784",
                     email: "omair@gmail.com",
                     username: "Omair123",
-                    password: "123456",
+                    password: "P@ssw0rd",
                 },
             },
         }),
