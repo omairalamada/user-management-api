@@ -25,10 +25,9 @@ export class UserEntity {
     @Column({unique: true, name: 'email_address'})
     email: string
 
-    @Column({})
+    @Column({nullable: true})
     username: string
 
-    @Exclude()
     @Column({ nullable: true })
-    password?: string
+    password: string
 }
