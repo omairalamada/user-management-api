@@ -1,10 +1,11 @@
 import { ResponseDto } from './../../common/dto/response.dto';
 import { UserEntity } from './entities/user.entity';
 import { UsersService } from './users.service';
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserDto } from './dtos/user.dto';
 import { EditUserDocDecorator, GetAllUsersDoc, RegisterUserDocDecorator } from './swagger/user-doc.decorator';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Users')
 @Controller('users')
@@ -19,6 +20,8 @@ export class UsersController {
         return { data: response }
     }   
 
+
+    @UseGuards(AuthGuard())
     @ApiOperation({ summary: 'Delete user by id', operationId: 'DeleteUser' })
     @ApiResponse({ status: 200, type: UserDto })
     @Delete(':id')
@@ -26,6 +29,7 @@ export class UsersController {
         return await this.userService.deleteUser(id);
     }
 
+    @UseGuards(AuthGuard())
     @Get('GetAllUsers')
     @GetAllUsersDoc()
     async getAllUsers(): Promise<ResponseDto<UserEntity[]>> {
@@ -34,6 +38,7 @@ export class UsersController {
         return { data: response }
     }
 
+    @UseGuards(AuthGuard())
     @Patch('edit/:id')
     @EditUserDocDecorator()
     async editUser(@Param('id') id: number, @Body() userDto: UserDto): Promise<ResponseDto<UserEntity>> {
