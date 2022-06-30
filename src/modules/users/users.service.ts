@@ -1,10 +1,11 @@
 import { ErrorMessages } from './../../common/error-messages.enum';
 import { UserEntity } from './entities/user.entity';
 import { UserDto } from './dtos/user.dto';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { UserNotFoundException } from 'src/exceptions/user-not-found.exception';
 
 @Injectable()
 export class UsersService { 
@@ -46,4 +47,39 @@ export class UsersService {
         return saved;
     }
 
+    async deleteUser(id: number): Promise<UserEntity> {
+        const user = (await this.findOne({ where: { id },})) as UserEntity;
+
+        if(!user) throw new UserNotFoundException();
+
+        return this.userRepo.remove(user);    
+    }
+
+    async getAllUsers(): Promise<UserEntity[]> {
+        const users: UserEntity[] = (await this.userRepo.find()) || []
+
+        return users;
+    }
+
+    async editUser(id: number, userDto: UserDto): Promise<UserEntity> {
+        const user = await this.userRepo.findOne({ where: { id }});
+
+        if(!user) {
+            throw new NotFoundException('User not found!');
+        }
+
+        const newUser = new UserEntity()
+        newUser.id = user.id;
+        newUser.firstName = userDto.firstName || null;
+        newUser.lastName = userDto?.lastName || null;
+        newUser.address = userDto?.address || null;
+        newUser.postCode = userDto?.postCode || null;
+        newUser.email = userDto?.email || null;
+        newUser.username = userDto?.username || null;
+        newUser.password = userDto?.password || null;
+
+        const updateUserDetails: UserEntity = await this.userRepo.save(newUser);
+
+        return updateUserDetails;
+    }
 }
