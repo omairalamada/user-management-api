@@ -20,10 +20,10 @@ export class UserEntity {
     @Column({ name: 'contact_number', nullable: true})
     contactNumber: string
     
-    @Column({unique: true, name: 'email_address'})
+    @Column({ name: 'email_address'})
     email: string
 
-    @Column({ name: 'username'})
+    @Column({unique: true, name: 'username'})
     username: string
 
     @Column({ name: 'password' })
