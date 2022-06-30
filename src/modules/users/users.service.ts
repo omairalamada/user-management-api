@@ -5,6 +5,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { UserNotFoundException } from 'src/exceptions/user-not-found.exception';
 
 @Injectable()
 export class UsersService { 
@@ -46,4 +47,11 @@ export class UsersService {
         return saved;
     }
 
+    async deleteUser(id: number): Promise<UserEntity> {
+        const user = (await this.findOne({ where: { id },})) as UserEntity;
+
+        if(!user) throw new UserNotFoundException();
+
+        return this.userRepo.remove(user);    
+    }
 }
