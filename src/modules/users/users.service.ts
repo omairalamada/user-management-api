@@ -5,13 +5,13 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOneOptions, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { UserNotFoundException } from 'src/exceptions/user-not-found.exception';
+import { UserNotFoundException } from './../../exceptions/user-not-found.exception';
 
 @Injectable()
 export class UsersService { 
     constructor(
         @InjectRepository(UserEntity)
-        private readonly userRepo: Repository<UserEntity>,
+        private userRepo: Repository<UserEntity>,
     ) {}
 
     findOne( findData: FindOneOptions<UserEntity>): Promise<Partial<UserEntity>> {
