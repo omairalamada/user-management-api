@@ -1,3 +1,4 @@
+import { IsEmail } from 'class-validator';
 import { ErrorMessages } from './../../common/error-messages.enum';
 import { UserEntity } from './entities/user.entity';
 import { UserDto } from './dtos/user.dto';
@@ -19,16 +20,21 @@ export class UsersService {
     }
 
     async createUser(user: UserDto): Promise<UserEntity> {
-        const { password, email } = user
-        const found = await this.findOne({ where: { email }})
+        const { password, username, email } = user
+        const found = await this.findOne({ where: { username }})
 
         // hash
         const salt = await bcrypt.genSalt();
         // generate hash password
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        if (found && found.email === email) {
-            throw new BadRequestException(ErrorMessages.ALREADY_REGISTERED)
+        if (found && found.username === username) {
+            throw new BadRequestException(ErrorMessages.USERNAME_USED);
+        }
+
+        const isEmailRegistered = await this.findOne({ where: { email }});
+        if(isEmailRegistered && isEmailRegistered.email === email) {
+            throw new BadRequestException(ErrorMessages.ALREADY_REGISTERED);
         }
 
         const newUser = this.userRepo.create({
