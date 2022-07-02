@@ -14,8 +14,8 @@ export class UserEntity {
     @Column({ name: 'address'})
     address: string
 
-    @Column({ name: 'post_code', type: 'integer'})
-    postCode: number
+    @Column({ name: 'post_code', nullable: true})
+    postCode: string
 
     @Column({ name: 'contact_number', nullable: true})
     contactNumber: string

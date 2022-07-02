@@ -11,7 +11,6 @@ async function bootstrap() {
     .setTitle('User Management API')
     .setDescription('User Managememt API')
     .setVersion('1.0')
-    .addTag('User Management')
     .addBearerAuth(
       {
         type: 'http',
