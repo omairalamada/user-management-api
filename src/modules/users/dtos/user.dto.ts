@@ -1,7 +1,10 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsString, Matches, MaxLength, MinLength } from 'class-validator'
+import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator'
 
 
 export class UserDto {
+    @IsOptional()
+    id?: number
+
     @IsNotEmpty()
     firstName: string;
 
