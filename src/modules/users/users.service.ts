@@ -19,7 +19,7 @@ export class UsersService {
     }
 
     async createUser(user: UserDto): Promise<UserEntity> {
-        const { firstName, lastName, address, postCode, contactNumber, email, username, password } = user
+        const { password, email } = user
         const found = await this.findOne({ where: { email }})
 
         // hash
@@ -32,13 +32,7 @@ export class UsersService {
         }
 
         const newUser = this.userRepo.create({
-            firstName,
-            lastName,
-            address,
-            postCode,
-            contactNumber,
-            email,
-            username,
+            ...user,
             password: hashedPassword,
         })
 
