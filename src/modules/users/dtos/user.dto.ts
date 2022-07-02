@@ -14,8 +14,8 @@ export class UserDto {
     @IsNotEmpty()
     address: string;
 
-    @IsNumber()
-    postCode: number;
+    @IsNotEmpty()
+    postCode: string;
 
     @IsNotEmpty()
     contactNumber: string;
