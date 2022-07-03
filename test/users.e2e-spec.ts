@@ -16,10 +16,30 @@ describe('UsersController E2E Test', () => {
         await app.init();
     });
 
-    it('should create a new user', () => {
-        return request(app.getHttpServer())
-        .post('/users/register')
-        .send({
+    describe('Test user when signing.', () => {
+
+        it('should login a user', () => {
+            return request(app.getHttpServer())
+            .post('/auth/login')
+            .send({
+                username: "abs123",
+                password: "P@ssw0rd",
+            })
+            .expect(201);
+        })
+
+        it('should return a 401 code, when user entered invalid credentials', () => {
+            return request(app.getHttpServer())
+            .post('/auth/login')
+            .send({
+                username: "abs123",
+                password: "password"
+            })
+        })
+    })
+
+    describe('Test user when signing up or create user', () => {
+        const sampleUserData = {
             firstName: "Omair",
             lastName: "Mangondaya",
             address: "Makati, City",
@@ -28,14 +48,41 @@ describe('UsersController E2E Test', () => {
             email: "omair@gmail.com",
             username: "Omair123",
             password: "P@ssw0rd",
+        }
+
+        it('should create a new user', () => {
+            return request(app.getHttpServer())
+            .post('/users/register')
+            .send({sampleUserData})
+            .expect(201);
         })
-        .expect(201);
+    
+        it('should response 400 code on username or email already used or registered when signing up account.', () => {
+            return request(app.getHttpServer())
+            .post('/users/register')
+            .send({sampleUserData})
+            .expect(400);
+        })
+    
+        it('should response 400 code when fields are not complete when signing up account.', () => {
+            return request(app.getHttpServer())
+            .post('/users/register')
+            .send({
+                firstName: "",
+                lastName: "Mangondaya",
+                address: "",
+                postCode: "",
+                contactNumber: "09303549784",
+                email: "omair@gmail.com",
+                username: "Omair123",
+                password: "P@ssw0rd",
+            })
+            .expect(400);
+        })
     })
 
-    it('should response 400 code on username or email already used or registered when signing up account.', () => {
-        return request(app.getHttpServer())
-        .post('/users/register')
-        .send({
+    describe('Test user when updating or modifying user details', () => {
+        const sampleUserData = {
             firstName: "Omair",
             lastName: "Mangondaya",
             address: "Makati, City",
@@ -44,33 +91,52 @@ describe('UsersController E2E Test', () => {
             email: "omair@gmail.com",
             username: "Omair123",
             password: "P@ssw0rd",
+        }
+
+        it('should return 401 code, when user is not signed in', () => {
+            return request(app.getHttpServer())
+            .patch('/users/edit/2')
+            .send({
+                ...sampleUserData, id: 3
+            })
+            .expect(401);
         })
-        .expect(400);
     })
 
-    it('should response 400 code when fields are not complete when signing up account.', () => {
-        return request(app.getHttpServer())
-        .post('/users/register')
-        .send({
-            firstName: "",
-            lastName: "Mangondaya",
-            address: "",
-            postCode: "",
-            contactNumber: "09303549784",
-            email: "omair@gmail.com",
-            username: "Omair123",
-            password: "P@ssw0rd",
+    describe('Test user when deleting of user', () => {
+        const sampleUserId = [4];
+
+        it('should return 401 code, when user is not signed in', () => {
+            return request(app.getHttpServer())
+            .delete('/users/delete/4')
+            .send({
+                sampleUserId
+            })
+            .expect(401);
         })
-        .expect(400);
     })
 
-    it('should login a user', () => {
-        return request(app.getHttpServer())
-        .post('/auth/login')
-        .send({
-            username: "abs123",
-            password: "P@ssw0rd",
+    describe('Test user when get list of all users', () => {
+        let jwtToken: string;
+        const sampleUserId = [4];
+
+        it('should return 401 code, when user is not signed in', () => {
+            return request(app.getHttpServer())
+            .get('/users/display')
+            .expect(401);
         })
-        .expect(201);
+
+        it('should return 200 code, when user is admin', async () => {
+            
+
+            const response = request(app.getHttpServer())
+            .get('/users/display')
+            .expect(201);
+            // set jwt token for use in subsequent tests
+            jwtToken = (await response).body.accessToken
+            expect(jwtToken).toMatch(/^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/) // jwt regex
+        })
     })
+
+
 })
