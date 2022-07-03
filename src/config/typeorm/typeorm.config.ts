@@ -1,31 +1,58 @@
+import { UserEntity } from './../../modules/users/entities/user.entity';
+import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { includes } from 'lodash';
 import { join } from 'path';
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { DEVELOPMENT_TYPE } from './../../enums/development-type.enum';
 ConfigModule.forRoot()
 
-//Dynamic condition for ssl
 const srcDir = join(__dirname, '../..');
 
-export default class TypeOrmConfig {
-    static getOrmConfig(configService: ConfigService): TypeOrmModuleOptions {
+const isDevEnv = () => {
+    return includes(DEVELOPMENT_TYPE, process.env.NODE_ENV)
+}
+
+const migrationsMatcher = `${join(srcDir,'database', 'migrations')}/*migration.{ts,js}`;
+
+export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
+    imports: [ConfigModule],
+    inject: [ConfigService],
+    useFactory: async (): Promise<TypeOrmModuleOptions>  => {
         return {
             type: 'mysql',
-            host: configService.get('DB_HOST'),
-            port: configService.get('DB_PORT'),
-            username: configService.get('DB_USERNAME'),
-            password: configService.get('DB_PASSWORD'),
-            database: configService.get('DB_DATABASE'),
-            entities: [`${srcDir}/modules/*.entity.{ts,js}`],
+            host: process.env.DB_HOST,
+            port: parseInt(process.env.DB_PORT, 10),
+            username: process.env.DB_USERNAME,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_DATABASE,
+            entities: [UserEntity],
+            migrations: [migrationsMatcher],
             synchronize: false,
-            autoLoadEntities: true
+            extra: {
+                charset: 'utf8mb4_unicode_ci',
+            },
+            autoLoadEntities: true,
+            logging: true
         }
     }
 }
 
-export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
-    imports: [ConfigModule],
-    useFactory: async (configService: ConfigService):
-
-    Promise<TypeOrmModuleOptions> => TypeOrmConfig.getOrmConfig(configService),
-    inject: [ConfigService]
+export function typeOrmConfig(): DataSourceOptions {
+    const config: MysqlConnectionOptions = {
+        type: 'mysql',
+        host: process.env.DB_HOST,
+        port: parseInt(process.env.DB_PORT, 10),
+        username: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_DATABASE,
+        entities: [UserEntity],
+        migrations: [migrationsMatcher],
+        extra: {
+            charset: 'utf8mb4_unicode_ci',
+        },
+        logging: true,
+    }
+    return config;
 }
