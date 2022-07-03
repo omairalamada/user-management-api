@@ -19,18 +19,17 @@ export class UsersController {
 
         return { data: response }
     }   
-
-
+    
     @UseGuards(AuthGuard())
     @ApiOperation({ summary: 'Delete user by id', operationId: 'DeleteUser' })
     @ApiResponse({ status: 200, type: UserDto })
-    @Delete(':id')
+    @Delete('delete/:id')
     async deleteUser(@Param('id') id: number) {
         return await this.userService.deleteUser(id);
     }
 
     @UseGuards(AuthGuard())
-    @Get('GetAllUsers')
+    @Get('display')
     @GetAllUsersDoc()
     async getAllUsers(): Promise<ResponseDto<UserEntity[]>> {
         const response = await this.userService.getAllUsers();
@@ -47,3 +46,4 @@ export class UsersController {
         return { data: response };
     }
 }
+    
