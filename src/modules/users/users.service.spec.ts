@@ -46,7 +46,7 @@ describe('UsersService', () => {
         firstName: "Omair",
         lastName: "Mangondaya",
         address: "Makati, City",
-        postCode: 4217,
+        postCode: "4217",
         contactNumber: "09303549784",
         email: "omair@gmail.com",
         username: "Omair123",
@@ -59,7 +59,7 @@ describe('UsersService', () => {
         firstName: "Omair",
         lastName: "Mangondaya",
         address: "Makati, City",
-        postCode: 4217,
+        postCode: "4217",
         contactNumber: "09303549784",
         email: "omair@gmail.com",
         username: "Omair123",
@@ -77,26 +77,5 @@ describe('UsersService', () => {
       })
     })
   })
-
-  // describe('Create a User', () => {
-  //   it('throws an error when no title is provided', async () => {
-  //     const createUserDto = {
-  //       firstName: "",
-  //       lastName: "",
-  //       address: "",
-  //       postCode: 4217,
-  //       contactNumber: "09303549784",
-  //       email: "omair@gmail.com",
-  //       username: "Omair123",
-  //       password: "P@ssw0rd",
-  //     };
-
-  //     const result = await userService.createUser(createUserDto);
-  //     expect(userService.createUser).toHaveBeenCalledWith(
-  //       createUserDto,
-  //     );
-  //     expect(result).toEqual('someUser');
-  //   })
-  // })
 
 });
