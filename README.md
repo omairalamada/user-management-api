@@ -47,9 +47,9 @@ $ npm run start:prod
 
 ## Test
 
+```bash
 # e2e tests
 $ npm run test:e2e
-
 ```
 
 ## Seeding
