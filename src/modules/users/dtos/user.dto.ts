@@ -1,9 +1,13 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator'
+import { UserRoles } from './../../auth/user-roles';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, Matches, MaxLength, MinLength } from 'class-validator'
 
 
 export class UserDto {
     @IsOptional()
     id?: number
+
+    @IsNotEmpty()
+    roles: UserRoles
 
     @IsNotEmpty()
     firstName: string;

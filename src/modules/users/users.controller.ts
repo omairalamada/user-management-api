@@ -6,6 +6,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserDto } from './dtos/user.dto';
 import { EditUserDocDecorator, GetAllUsersDoc, RegisterUserDocDecorator } from './swagger/user-doc.decorator';
 import { AuthGuard } from '@nestjs/passport';
+import { ACGuard, UseRoles } from 'nest-access-control';
 
 @ApiTags('Users')
 @Controller('users')
@@ -20,7 +21,12 @@ export class UsersController {
         return { data: response }
     }   
     
-    @UseGuards(AuthGuard())
+    @UseGuards(AuthGuard(), ACGuard)
+    @UseRoles({
+        resource:  "posts",
+        action:  "delete",
+        possession:  'any',
+    })
     @ApiOperation({ summary: 'Delete user by id', operationId: 'DeleteUser' })
     @ApiResponse({ status: 200, type: UserDto })
     @Delete('delete/:id')
@@ -28,7 +34,12 @@ export class UsersController {
         return await this.userService.deleteUser(id);
     }
 
-    @UseGuards(AuthGuard())
+    @UseGuards(AuthGuard(), ACGuard)
+    @UseRoles({
+        resource:  'posts',
+        action:  "delete",
+        possession:  'any',
+    })
     @Get('display')
     @GetAllUsersDoc()
     async getAllUsers(): Promise<ResponseDto<UserEntity[]>> {
@@ -37,6 +48,12 @@ export class UsersController {
         return { data: response }
     }
 
+    @UseGuards(AuthGuard(), ACGuard)
+    @UseRoles({
+        resource:  'posts',
+        action:  "delete",
+        possession:  'any',
+    })
     @UseGuards(AuthGuard())
     @Patch('edit/:id')
     @EditUserDocDecorator()

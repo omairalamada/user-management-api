@@ -46,6 +46,7 @@
     "class-validator": "^0.13.2",
     "commander": "^9.3.0",
     "mysql2": "^2.3.3",
+    "nest-access-control": "^2.2.0",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
