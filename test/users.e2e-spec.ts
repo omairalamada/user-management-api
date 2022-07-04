@@ -40,6 +40,7 @@ describe('UsersController E2E Test', () => {
 
     describe('Test user when signing up or create user', () => {
         const sampleUserData = {
+            roles: "Admin",
             firstName: "Omair",
             lastName: "Mangondaya",
             address: "Makati, City",
@@ -68,6 +69,7 @@ describe('UsersController E2E Test', () => {
             return request(app.getHttpServer())
             .post('/users/register')
             .send({
+                roles: "Admin",
                 firstName: "",
                 lastName: "Mangondaya",
                 address: "",
@@ -83,6 +85,7 @@ describe('UsersController E2E Test', () => {
 
     describe('Test user when updating or modifying user details', () => {
         const sampleUserData = {
+            roles: "Admin",
             firstName: "Omair",
             lastName: "Mangondaya",
             address: "Makati, City",
@@ -117,24 +120,12 @@ describe('UsersController E2E Test', () => {
     })
 
     describe('Test user when get list of all users', () => {
-        let jwtToken: string;
         const sampleUserId = [4];
 
         it('should return 401 code, when user is not signed in', () => {
             return request(app.getHttpServer())
             .get('/users/display')
             .expect(401);
-        })
-
-        it('should return 200 code, when user is admin', async () => {
-            
-
-            const response = request(app.getHttpServer())
-            .get('/users/display')
-            .expect(201);
-            // set jwt token for use in subsequent tests
-            jwtToken = (await response).body.accessToken
-            expect(jwtToken).toMatch(/^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/) // jwt regex
         })
     })
 
