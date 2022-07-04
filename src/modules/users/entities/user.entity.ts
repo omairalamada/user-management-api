@@ -1,6 +1,5 @@
 import { UserRoles } from './../../auth/user-roles';
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { type } from 'os';
 
 @Entity('User')
 export class UserEntity {

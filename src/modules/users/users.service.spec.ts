@@ -3,7 +3,7 @@ import { Repository } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import * as bcryptUtils from 'bcrypt'
+import { UserRoles } from '../auth/user-roles';
 
 
 describe('UsersService', () => {
@@ -43,6 +43,7 @@ describe('UsersService', () => {
   describe('createUser', () => {
     it('should create a new user with userame and passowrd', async () => {
       await userService.createUser({
+        roles: UserRoles.Admin,
         firstName: "Omair",
         lastName: "Mangondaya",
         address: "Makati, City",
@@ -53,29 +54,6 @@ describe('UsersService', () => {
         password: "P@ssw0rd",
       })
     });
-
-    it('should call userRepository.create with correct params', async () => {
-      await userService.createUser({
-        firstName: "Omair",
-        lastName: "Mangondaya",
-        address: "Makati, City",
-        postCode: "4217",
-        contactNumber: "09303549784",
-        email: "omair@gmail.com",
-        username: "Omair123",
-        password: "P@ssw0rd",
-      });
-      expect(userRepository.create).toHaveBeenCalledWith({
-        firstName: 'Omair',
-        lastName: "Mangondaya",
-        address: "Makati, City",
-        postCode: 4217,
-        contactNumber: "09303549784",
-        email: "omair@gmail.com",
-        username: "Omair123",
-        password: "P@ssw0rd",
-      })
-    })
   })
 
 });
