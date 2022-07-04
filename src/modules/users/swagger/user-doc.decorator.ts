@@ -63,6 +63,7 @@ const GetAllUsersDoc = () =>
         ApiBody({
             schema: {
                 example: {
+                    roles: 'Admin',
                     firstName: "Omair",
                     lastName: "Mangondaya",
                     address: "Lipa City, Batangas",

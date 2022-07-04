@@ -1,9 +1,14 @@
+import { UserRoles } from './../../auth/user-roles';
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { type } from 'os';
 
 @Entity('User')
 export class UserEntity {
     @PrimaryGeneratedColumn()
     id: number
+
+    @Column({type: 'enum', enum: UserRoles, default: UserRoles.User}) 
+    roles: UserRoles;
 
     @Column({ name: 'first_name', type: "varchar" })
     firstName: string
